@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kamen Rider Universe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --neon-red:    #ff2244;
+      --neon-blue:   #00d4ff;
+      --neon-gold:   #ffd700;
+      --neon-green:  #00ff88;
+      --neon-purple: #bf00ff;
+      --dark-bg:     #050810;
+      --card-bg:     #0a0f1e;
+      --border:      rgba(0,212,255,.25);
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--dark-bg);
+      color: #cde;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ═══════════════════════════════════════
+        SCANLINE OVERLAY
+    ═══════════════════════════════════════ */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 9999;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,.18) 3px, rgba(0,0,0,.18) 4px
+      );
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════
+        ANIMATED BACKGROUND GRID
+    ═══════════════════════════════════════ */
+    .grid-bg {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,212,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,212,255,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridScroll 20s linear infinite;
+    }
+    @keyframes gridScroll {
+      from { background-position: 0 0; }
+      to   { background-position: 60px 60px; }
+    }
+
+    .particle {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 1;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: .6; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+	/* HEADER */
+	.main-header {
+	  position: fixed;
+	  top: 0;
+	  width: 100%;
+	  background: linear-gradient(180deg, #0a0f1e 0%, rgba(10,15,30,.85) 100%);
+	  backdrop-filter: blur(10px);
+	  border-bottom: 1px solid rgba(0,212,255,.15);
+	  z-index: 9999;
+	}
+
+	/* Container */
+	.header-container {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  padding: 14px 40px;
+	}
+
+	/* LOGO */
+	.logo {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 1.2rem;
+	  font-weight: 900;
+	  letter-spacing: .15em;
+	}
+
+	.logo-red {
+	  color: #ff3c3c;
+	  text-shadow: 0 0 10px #ff3c3c;
+	}
+
+	.logo-white {
+	  color: #fff;
+	}
+
+	/* MENU */
+	.menu {
+	  display: flex;
+	  gap: 32px;
+	}
+
+	.menu a {
+	  text-decoration: none;
+	  font-size: 0.75rem;
+	  letter-spacing: .2em;
+	  color: rgba(200,220,240,.7);
+	  position: relative;
+	  transition: 0.3s;
+	}
+
+	.menu a::after {
+	  content: '';
+	  position: absolute;
+	  bottom: -6px;
+	  left: 0;
+	  width: 0%;
+	  height: 2px;
+	  background: var(--neon-blue);
+	  transition: 0.3s;
+	}
+
+	.menu a:hover {
+	  color: #fff;
+	  text-shadow: 0 0 10px var(--neon-blue);
+	}
+
+	.menu a:hover::after {
+	  width: 100%;
+	}
+
+	/* ICONS */
+	.header-icons {
+	  display: flex;
+	  gap: 12px;
+	}
+
+	.header-icons span {
+	  width: 34px;
+	  height: 34px;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	  border: 1px solid rgba(255,255,255,.1);
+	  border-radius: 6px;
+	  cursor: pointer;
+	  transition: 0.3s;
+	}
+
+	.header-icons span:hover {
+	  border-color: var(--neon-blue);
+	  box-shadow: 0 0 10px var(--neon-blue);
+	  color: var(--neon-blue);
+	}
+
+	/* SUB HEADER */
+	.header-sub {
+	  font-size: 0.8rem;
+	  color: rgba(150,200,255,.7);
+	  padding: 6px 40px;
+	  border-top: 1px solid rgba(255,255,255,.05);
+	  text-shadow: 0 0 8px rgba(0,212,255,.4);
+	}
+
+	body {
+	  padding-top: 80px;
+	}
+
+    header {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 80px 20px 60px;
+      animation: fadeSlideDown .9s ease both;
+    }
+
+    .header-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .5em;
+      color: var(--neon-blue);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      opacity: .8;
+    }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      background: linear-gradient(135deg, #fff 0%, var(--neon-blue) 45%, var(--neon-red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(0,212,255,.55)) drop-shadow(0 0 60px rgba(255,34,68,.3));
+      animation: titlePulse 3s ease-in-out infinite;
+    }
+    @keyframes titlePulse {
+      0%,100% { filter: drop-shadow(0 0 30px rgba(0,212,255,.55)) drop-shadow(0 0 60px rgba(255,34,68,.3)); }
+      50%      { filter: drop-shadow(0 0 50px rgba(0,212,255,.85)) drop-shadow(0 0 100px rgba(255,34,68,.55)); }
+    }
+
+    .header-sub {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.7rem, 2.5vw, 1.1rem);
+      letter-spacing: .35em;
+      color: var(--neon-red);
+      margin-top: 12px;
+      text-shadow: 0 0 15px var(--neon-red);
+    }
+
+    .divider {
+      width: 220px; height: 2px;
+      margin: 32px auto 0;
+      background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-red), transparent);
+      box-shadow: 0 0 12px var(--neon-blue);
+    }
+
+    @keyframes fadeSlideDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .riders-section {
+      position: relative; z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .riders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 28px;
+    }
+
+    .rider-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: visible;
+      cursor: pointer;
+      animation: fadeSlideUp .7s ease both;
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+
+    .rider-card:nth-child(1) { animation-delay: .1s; --accent: var(--neon-green); }
+    .rider-card:nth-child(2) { animation-delay: .2s; --accent: var(--neon-gold);  }
+    .rider-card:nth-child(3) { animation-delay: .3s; --accent: var(--neon-red);   }
+    .rider-card:nth-child(4) { animation-delay: .4s; --accent: var(--neon-blue);  }
+    .rider-card:nth-child(5) { animation-delay: .5s; --accent: var(--neon-purple);}
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .rider-card::before, .rider-card::after {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border-color: var(--accent);
+      border-style: solid;
+      transition: width .35s, height .35s;
+      z-index: 2;
+    }
+    .rider-card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+    .rider-card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+    .rider-card:hover::before,
+    .rider-card:hover::after { width: 40px; height: 40px; }
+
+    .rider-card:hover {
+	  z-index: 1000;
+      transform: translateY(-8px) scale(1.03);
+      border-color: var(--accent);
+      box-shadow:
+        0 0 20px var(--accent),
+        0 0 60px color-mix(in srgb, var(--accent) 40%, transparent),
+        0 20px 40px rgba(0,0,0,.6);
+    }
+
+    .card-image {
+      position: relative;
+      width: 100%; aspect-ratio: 3/4;
+      background: linear-gradient(180deg, #0d1428 0%, #050810 100%);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform .4s ease, filter .4s ease;
+      filter: saturate(.9) brightness(.95);
+    }
+
+    .rider-card:hover .card-image img {
+      transform: scale(1.07);
+      filter: saturate(1.2) brightness(1.05) drop-shadow(0 0 18px var(--accent));
+    }
+
+    .card-image img[src=""],
+    .card-image img:not([src]) {
+      display: none;
+    }
+    .card-image-placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px;
+      color: var(--accent);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .12em;
+      opacity: .5;
+    }
+    .card-image-placeholder svg { width: 56px; opacity: .6; }
+
+    .card-image::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 45%;
+      background: linear-gradient(to top, var(--card-bg), transparent);
+      pointer-events: none;
+    }
+
+    .card-number {
+      position: absolute;
+      top: 10px; left: 10px; z-index: 3;
+      font-family: 'Orbitron', sans-serif;
+      font-size: .6rem; font-weight: 900;
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+      letter-spacing: .1em;
+      background: rgba(5,8,16,.7);
+      padding: 3px 7px;
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    .card-body {
+      padding: 18px 16px 20px;
+    }
+
+    .card-series {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .62rem;
+      letter-spacing: .25em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 5px;
+      opacity: .75;
+    }
+
+    .card-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(.9rem, 2.5vw, 1.1rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 0 12px rgba(255,255,255,.25);
+      transition: text-shadow .35s;
+    }
+    .rider-card:hover .card-name {
+      text-shadow: 0 0 20px var(--accent);
+    }
+
+    .card-tagline {
+      font-size: .82rem;
+      color: rgba(180,210,230,.6);
+      margin-top: 6px;
+      font-style: italic;
+      letter-spacing: .04em;
+    }
+
+    .card-stats {
+      margin-top: 14px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .stat-row {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .65rem;
+    }
+    .stat-label {
+      color: rgba(150,180,200,.55);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      min-width: 68px;
+    }
+    .stat-bar {
+      flex: 1; height: 3px;
+      background: rgba(255,255,255,.07);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .stat-fill {
+      height: 100%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+      border-radius: 2px;
+      animation: barGrow 1.2s ease both;
+    }
+    @keyframes barGrow {
+      from { width: 0 !important; }
+    }
+    .stat-val {
+      color: var(--accent);
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* ═══════════════════════════════════════
+        HOVER TOOLTIP (MODIFIED)
+    ═══════════════════════════════════════ */
+    .info-panel {
+      position: absolute;
+      left: calc(100% + 16px);
+      top: -60px; /* Đẩy bảng lên cao hơn để tránh bị che */
+      width: 280px; /* Tăng nhẹ chiều rộng để chữ to hơn không bị gãy dòng */
+      background: rgba(5,8,18,.96);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 20px;
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-10px);
+      transition: opacity .3s ease, transform .3s ease;
+      box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    .rider-card:hover .info-panel {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .rider-card:last-child .info-panel,
+    .rider-card:nth-last-child(-n+2) .info-panel {
+      left: auto;
+      right: calc(100% + 16px);
+    }
+
+    .info-panel h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem; /* Tăng kích thước tiêu đề */
+      color: var(--accent);
+      text-shadow: 0 0 10px var(--accent);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+      letter-spacing: .06em;
+    }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 10px;
+      font-size: 0.95rem; /* Tăng kích thước font hàng thông tin */
+      gap: 10px;
+    }
+    .info-key {
+      font-family: 'Share Tech Mono', monospace;
+      color: rgba(150,180,200,.65);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+    .info-val {
+      color: #e0eef8;
+      text-align: right;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .info-desc {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      font-size: 0.9rem; /* Tăng kích thước font mô tả */
+      color: rgba(180,210,230,.85);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+        SECTION TITLE
+    ═══════════════════════════════════════ */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeSlideUp .8s ease both;
+    }
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      letter-spacing: .5em;
+      text-transform: uppercase;
+      color: rgba(0,212,255,.7);
+      position: relative;
+      display: inline-block;
+    }
+    .section-title::before,
+    .section-title::after {
+      content: '◈';
+      margin: 0 16px;
+      font-size: .7em;
+      opacity: .5;
+    }
+	.music-box {
+	  position: fixed;
+	  bottom: 80px;
+	  right: 20px;
+	  width: 260px;
+	  padding: 12px;
+	  background: rgba(5,8,16,.9);
+	  border: 1px solid var(--neon-blue);
+	  border-radius: 6px;
+	  box-shadow: 0 0 20px var(--neon-blue);
+	  z-index: 9999;
+	}
+
+	.music-title {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 0.8rem;
+	  letter-spacing: .2em;
+	  color: var(--neon-blue);
+	  margin-bottom: 8px;
+	  text-shadow: 0 0 10px var(--neon-blue);
+	}
+
+	.music-box audio {
+	  width: 100%;
+	  filter: hue-rotate(180deg) brightness(1.2);
+	}
+	.footer {
+	  position: relative;
+	  z-index: 10;
+	  background: var(--dark-bg);
+	  padding: 60px 60px 30px;
+	  border-top: 1px solid rgba(0,212,255,.15);
+	}
+
+	.footer-container {
+	  max-width: 1400px;
+	  margin: 0 auto;
+	  display: grid;
+	  grid-template-columns: 2fr 1fr 1fr 1fr;
+	  gap: 40px;
+	}
+
+	/* logo */
+	.footer-logo {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 1.2rem;
+	  color: var(--neon-red);
+	  letter-spacing: .2em;
+	  text-shadow: 0 0 12px var(--neon-red);
+	  margin-bottom: 14px;
+	}
+
+	/* text */
+	.footer-desc {
+	  font-size: 0.85rem;
+	  color: rgba(180,210,230,.6);
+	  line-height: 1.6;
+	}
+
+	/* title */
+	.footer-title {
+	  font-family: 'Share Tech Mono', monospace;
+	  font-size: 0.75rem;
+	  letter-spacing: .3em;
+	  color: var(--neon-blue);
+	  margin-bottom: 14px;
+	  text-transform: uppercase;
+	}
+
+	/* links */
+	.footer-col ul {
+	  list-style: none;
+	}
+
+	.footer-col li {
+	  margin-bottom: 10px;
+	}
+
+	.footer-col a {
+	  text-decoration: none;
+	  font-size: 0.8rem;
+	  color: rgba(180,210,230,.55);
+	  transition: .3s;
+	}
+
+	.footer-col a:hover {
+	  color: var(--neon-blue);
+	  text-shadow: 0 0 10px var(--neon-blue);
+	}
+
+	/* bottom */
+	.footer-bottom {
+	  margin-top: 40px;
+	  padding-top: 18px;
+	  border-top: 1px solid rgba(0,212,255,.1);
+	  display: flex;
+	  justify-content: space-between;
+	  align-items: center;
+	}
+
+	.footer-bottom p {
+	  font-family: 'Share Tech Mono', monospace;
+	  font-size: 0.7rem;
+	  color: rgba(0,212,255,.3);
+	  letter-spacing: .2em;
+	}
+
+	/* social */
+	.social a {
+	  display: inline-block;
+	  width: 34px;
+	  height: 34px;
+	  line-height: 34px;
+	  text-align: center;
+	  margin-left: 10px;
+	  font-family: 'Orbitron';
+	  font-size: 0.7rem;
+	  border: 1px solid rgba(0,212,255,.3);
+	  color: var(--neon-blue);
+	  text-decoration: none;
+	  transition: .3s;
+	}
+
+	.social a:hover {
+	  background: var(--neon-blue);
+	  color: #000;
+	  box-shadow: 0 0 12px var(--neon-blue);
+	}
+
+    footer {
+      position: relative; z-index: 10;
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid rgba(0,212,255,.1);
+    }
+    .footer-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: .85rem;
+      font-weight: 900;
+      letter-spacing: .3em;
+      color: rgba(255,255,255,.2);
+    }
+    .footer-sub {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: .90rem;
+      letter-spacing: .2em;
+      color: rgba(0,212,255,.25);
+      margin-top: 8px;
+    }
+    .footer-dot {
+      display: inline-block;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--neon-blue);
+      box-shadow: 0 0 8px var(--neon-blue);
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 900px) {
+      .info-panel {
+        display: none;
+      }
+      .rider-card:hover {
+        transform: translateY(-4px) scale(1.02);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .riders-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      header { padding: 50px 16px 40px; }
+    }
+
+    @media (max-width: 380px) {
+      .riders-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="main-header">
+	  <div class="header-container">
+
+		<!-- Logo -->
+		<div class="logo">
+		  <span class="logo-red">KAMEN</span><span class="logo-white">RIDER</span>
+		</div>
+
+		<!-- Menu -->
+		<nav class="menu">
+		  <a href="#">SẢN PHẨM</a>
+		  <a href="#">DANH MỤC</a>
+		  <a href="#">THƯƠNG HIỆU</a>
+		  <a href="#">TIN TỨC</a>
+		</nav>
+
+		<!-- Icons -->
+		<div class="header-icons">
+		  <span>🔍</span>
+		  <span>♡</span>
+		  <span>🛒</span>
+		</div>
+
+	  </div>
+
+	</div>
+  <div class="grid-bg"></div>
+
+  <div class="particle" style="left:8%;width:3px;height:3px;background:#00d4ff;box-shadow:0 0 6px #00d4ff;animation-duration:12s;animation-delay:0s;"></div>
+  <div class="particle" style="left:22%;width:2px;height:2px;background:#ff2244;box-shadow:0 0 6px #ff2244;animation-duration:9s;animation-delay:2s;"></div>
+  <div class="particle" style="left:50%;width:3px;height:3px;background:#ffd700;box-shadow:0 0 8px #ffd700;animation-duration:14s;animation-delay:4s;"></div>
+  <div class="particle" style="left:70%;width:2px;height:2px;background:#00ff88;box-shadow:0 0 6px #00ff88;animation-duration:10s;animation-delay:1s;"></div>
+  <div class="particle" style="left:88%;width:3px;height:3px;background:#bf00ff;box-shadow:0 0 8px #bf00ff;animation-duration:11s;animation-delay:3s;"></div>
+  <div class="particle" style="left:35%;width:2px;height:2px;background:#00d4ff;box-shadow:0 0 5px #00d4ff;animation-duration:16s;animation-delay:6s;"></div>
+  <div class="particle" style="left:60%;width:2px;height:2px;background:#ff2244;box-shadow:0 0 5px #ff2244;animation-duration:13s;animation-delay:7s;"></div>
+  
+  <div class="music-box">
+  <p class="music-title">♪ GEATS THEME</p>
+  <audio controls loop>
+    <source src="audio/geats.mp3" type="audio/mpeg">
+  </audio>
+</div>
+  
+  <header>
+    <p class="header-eyebrow">// TOEI COMPANY — KAMEN RIDER UNIVERSE //</p>
+    <h1>KAMEN RIDER</h1>
+    <p class="header-sub">仮面ライダー — RIDER DATABASE</p>
+    <div class="divider"></div>
+  </header>
+
+  <main class="riders-section">
+    <div class="section-header">
+      <span class="section-title">Legendary Riders</span>
+    </div>
+
+    <div class="riders-grid">
+
+      <article class="rider-card">
+        <div class="card-number">No.01</div>
+        <div class="card-image">
+          <img src="img\double.jpg" alt="Kamen Rider Double" />
+        </div>
+        <div class="card-body">
+          <p class="card-series">2009 • Kamen Rider W</p>
+          <h2 class="card-name">Double</h2>
+          <p class="card-tagline">"Futo's Two-in-One Detective"</p>
+          <div class="card-stats">
+            <div class="stat-row">
+              <span class="stat-label">Punch</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:82%"></div></div>
+              <span class="stat-val">2.5t</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Kick</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:88%"></div></div>
+              <span class="stat-val">6.0t</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>◈ KAMEN RIDER W</h3>
+          <div class="info-row"><span class="info-key">Năm ra mắt</span><span class="info-val">2009</span></div>
+          <div class="info-row"><span class="info-key">Chiều cao</span><span class="info-val">195 cm</span></div>
+          <div class="info-row"><span class="info-key">Cân nặng</span><span class="info-val">85 kg</span></div>
+          <div class="info-row"><span class="info-key">Driver</span><span class="info-val">Double Driver</span></div>
+          <div class="info-row"><span class="info-key">Lực đấm</span><span class="info-val">2.5 tấn</span></div>
+          <div class="info-row"><span class="info-key">Lực đá</span><span class="info-val">6.0 tấn</span></div>
+          <p class="info-desc">Hai tâm hồn, một cơ thể. Shotaro Hidari &amp; Philip hợp nhất tạo thành Double. Sử dụng Memory Gadget với 6 dạng biến đổi kết hợp (HeatMetal, CycloneJoker…). Người bảo vệ thành phố gió Futo.</p>
+        </div>
+      </article>
+
+      <article class="rider-card">
+        <div class="card-number">No.02</div>
+        <div class="card-image">
+          <img src="img\geats.jpg" alt="Kamen Rider Geats" />
+        </div>
+        <div class="card-body">
+          <p class="card-series">2022 • Kamen Rider Geats</p>
+          <h2 class="card-name">Geats</h2>
+          <p class="card-tagline">"The Immortal Fox God"</p>
+          <div class="card-stats">
+            <div class="stat-row">
+              <span class="stat-label">Punch</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:90%"></div></div>
+              <span class="stat-val">69.9t</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Kick</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:93%"></div></div>
+              <span class="stat-val">149.9t</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>◈ KAMEN RIDER GEATS</h3>
+          <div class="info-row"><span class="info-key">Năm ra mắt</span><span class="info-val">2022</span></div>
+          <div class="info-row"><span class="info-key">Chiều cao</span><span class="info-val">209.0 cm</span></div>
+          <div class="info-row"><span class="info-key">Cân nặng</span><span class="info-val">119.9 kg</span></div>
+          <div class="info-row"><span class="info-key">Driver</span><span class="info-val">Desire Driver</span></div>
+          <div class="info-row"><span class="info-key">Lực đấm</span><span class="info-val">69.9 tấn</span></div>
+          <div class="info-row"><span class="info-key">Lực đá</span><span class="info-val">149.9 tấn</span></div>
+          <p class="info-desc">Ace Ukiyo — vị thần bất tử tham gia "Desire Grand Prix" qua nhiều thời đại. Dùng Raise Buckle hoán đổi năng lực đa dạng. Hình thức mạnh nhất: Geats Magnum Boost Form.</p>
+        </div>
+      </article>
+
+      <article class="rider-card">
+        <div class="card-number">No.03</div>
+        <div class="card-image">
+          <img src="img\decade.jpg" alt="Kamen Rider Decade" />
+        </div>
+        <div class="card-body">
+          <p class="card-series">2009 • Kamen Rider Decade</p>
+          <h2 class="card-name">Decade</h2>
+          <p class="card-tagline">"Destroyer of Worlds"</p>
+          <div class="card-stats">
+            <div class="stat-row">
+              <span class="stat-label">Punch</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:88%"></div></div>
+              <span class="stat-val">15.8t</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Kick</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:91%"></div></div>
+              <span class="stat-val">36.4t</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>◈ KAMEN RIDER DECADE</h3>
+          <div class="info-row"><span class="info-key">Năm ra mắt</span><span class="info-val">2009</span></div>
+          <div class="info-row"><span class="info-key">Chiều cao</span><span class="info-val">192 cm</span></div>
+          <div class="info-row"><span class="info-key">Cân nặng</span><span class="info-val">853kg</span></div>
+          <div class="info-row"><span class="info-key">Driver</span><span class="info-val">Decade Driver</span></div>
+          <div class="info-row"><span class="info-key">Lực đấm</span><span class="info-val">15.8 tấn</span></div>
+          <div class="info-row"><span class="info-key">Lực đá</span><span class="info-val">36.4 tấn</span></div>
+          <p class="info-desc">Tsukasa Kadoya — "Kẻ hủy diệt thế giới" du hành qua 9 thế giới AR. Sử dụng Ride Cards để biến đổi thành các Rider tiền nhiệm. Series kỷ niệm 10 năm Heisei Kamen Rider.</p>
+        </div>
+      </article>
+
+      <article class="rider-card">
+        <div class="card-number">No.04</div>
+        <div class="card-image">
+          <img src="img\build.jpg" alt="Kamen Rider Build" />
+        </div>
+        <div class="card-body">
+          <p class="card-series">2017 • Kamen Rider Build</p>
+          <h2 class="card-name">Build</h2>
+          <p class="card-tagline">"The Genius Physicist Rider"</p>
+          <div class="card-stats">
+            <div class="stat-row">
+              <span class="stat-label">Punch</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:75%"></div></div>
+              <span class="stat-val">14.7t</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Kick</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:80%"></div></div>
+              <span class="stat-val">35.1t</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>◈ KAMEN RIDER BUILD</h3>
+          <div class="info-row"><span class="info-key">Năm ra mắt</span><span class="info-val">2017</span></div>
+          <div class="info-row"><span class="info-key">Chiều cao</span><span class="info-val">196 cm</span></div>
+          <div class="info-row"><span class="info-key">Cân nặng</span><span class="info-val">99 kg</span></div>
+          <div class="info-row"><span class="info-key">Driver</span><span class="info-val">Build Driver</span></div>
+          <div class="info-row"><span class="info-key">Lực đấm</span><span class="info-val">14.7 tấn</span></div>
+          <div class="info-row"><span class="info-key">Lực đá</span><span class="info-val">35.1 tấn</span></div>
+          <p class="info-desc">Sento Kiryu sử dụng Build Driver kết hợp Full Bottles (sức mạnh từ các vật/khái niệm như Rabbit, Tank…) để biến thân thành Kamen Rider Build. Build trộn 2 Bottle để tạo các form khác nhau (RabbitTank, GorillaMond, HawkGatling…). Hình thức mạnh nhất: Genius Form / RabbitRabbit & TankTank / Build Genius (toàn bộ sức mạnh Full Bottle, cân bằng và vượt trội).</p>
+        </div>
+      </article>
+
+      <article class="rider-card">
+        <div class="card-number">No.05</div>
+        <div class="card-image">
+          <img src="img\kabuto.jpg" alt="Kamen Rider Kabuto" />
+        </div>
+        <div class="card-body">
+          <p class="card-series">2006 • Kamen Rider Kabuto</p>
+          <h2 class="card-name">Kabuto</h2>
+          <p class="card-tagline">"The Man Who Walks the Path of Heaven"</p>
+          <div class="card-stats">
+            <div class="stat-row">
+              <span class="stat-label">Punch</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:84%"></div></div>
+              <span class="stat-val">8.0t</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Kick</span>
+              <div class="stat-bar"><div class="stat-fill" style="width:87%"></div></div>
+              <span class="stat-val">10.0t</span>
+            </div>
+          </div>
+        </div>
+        <div class="info-panel">
+          <h3>◈ KAMEN RIDER KABUTO</h3>
+          <div class="info-row"><span class="info-key">Năm ra mắt</span><span class="info-val">2006</span></div>
+          <div class="info-row"><span class="info-key">Chiều cao</span><span class="info-val">190 cm</span></div>
+          <div class="info-row"><span class="info-key">Cân nặng</span><span class="info-val">132 kg</span></div>
+          <div class="info-row"><span class="info-key">Driver</span><span class="info-val">Kabuto Zecter</span></div>
+          <div class="info-row"><span class="info-key">Lực đấm</span><span class="info-val">8.0 tấn</span></div>
+          <div class="info-row"><span class="info-key">Lực đá</span><span class="info-val">10.0 tấn</span></div>
+          <p class="info-desc">Tendou Souji sử dụng Kabuto Zecter gắn vào Kabuto Belt để biến thân thành Kamen Rider Kabuto. Kabuto có cơ chế Cast Off để chuyển sang dạng chiến đấu tốc độ cao và dùng Clock Up để di chuyển nhanh gần như dừng thời gian. Hình thức mạnh nhất: Hyper Form (sử dụng Hyper Zecter, có thể thao túng thời gian và sức mạnh vượt trội).</p>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+
+  <footer class="footer">
+	  <div class="footer-container">
+
+		<div class="footer-col">
+		  <h2 class="footer-logo">KAMENRIDER</h2>
+		  <p class="footer-desc">
+			Thông tin chi tiết về 5 Kamen rider được ưa thích nhất: Double, Geats, Decade, Build, Kabuto
+		  </p>
+		</div>
+
+		<div class="footer-col">
+		  <h3 class="footer-title">KAMEN RIDER</h3>
+		  <ul>
+			<li><a href="#">kamen Rider Double</a></li>
+			<li><a href="#">kamen Rider Geats</a></li>
+			<li><a href="#">kamen Rider Decade</a></li>
+			<li><a href="#">kamen Rider Build</a></li>
+			<li><a href="#">kamen Rider Kabuto</a></li>
+		  </ul>
+		</div>
+
+		<div class="footer-col">
+		  <h3 class="footer-title">HỖ TRỢ</h3>
+		  <ul>
+			<li><a href="#">Hướng dẫn lắp ráp</a></li>
+			<li><a href="#">Chính sách đổi trả</a></li>
+			<li><a href="#">Chính sách bảo hành</a></li>
+			<li><a href="#">Vận chuyển & phí ship</a></li>
+			<li><a href="#">Liên hệ</a></li>
+		  </ul>
+		</div>
+
+		<div class="footer-col">
+		  <h3 class="footer-title">VỀ CHÚNG TÔI</h3>
+		  <ul>
+			<li><a href="#">Giới thiệu</a></li>
+			<li><a href="#">Blog</a></li>
+			<li><a href="#">Cộng đồng</a></li>
+			<li><a href="#">Tuyển dụng</a></li>
+		  </ul>
+		</div>
+
+	  </div>
+
+	  <div class="footer-bottom">
+		<p>© 2026 KAMENRIDER DATABASE</p>
+
+		<div class="social">
+		  <a href="#">F</a>
+		  <a href="#">IN</a>
+		  <a href="#">YT</a>
+		  <a href="#">TG</a>
+		</div>
+	  </div>
+  </footer>
+  
+    <footer>
+    <p class="footer-logo">KAMEN RIDER UNIVERSE</p>
+    <p class="footer-sub">
+      仮面ライダー
+      <span class="footer-dot"></span>
+      TOEI COMPANY LTD.
+      <span class="footer-dot"></span>
+      Thiều Văn Trung
+      <span class="footer-dot"></span>
+      Lê Hồng Hải
+      <span class="footer-dot"></span>
+      Trần Tiến Đạt
+      <span class="footer-dot"></span>
+      Hoàng Anh Vũ
+      <span class="footer-dot"></span>
+      Đào Hữu Kiệt
+    </p>
+  </footer>
+</body>
+</html>
